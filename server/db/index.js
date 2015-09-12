@@ -9,30 +9,55 @@ var request = require("request");
 var dbConnection;
 
 
-dbConnection = mysql.createConnection({
-    user: "root",
-    password: "",
-    database: "chat"
-  });
-
-
+// dbConnection = mysql.createConnection({
+//     user: "root",
+//     password: "",
+//     database: "chat"
+//   });
 
 module.exports = {
-  messages: {
-    get: function(req, res) {},
-    post: function(req, res) {
-      dbConnection.connect();
-      console.log('posting messages');
-      console.log(req.body.message);
 
-      var body = {'body':req.body.message};
-      console.log(body);
-      dbConnection.query('INSERT INTO `messages` SET ?', body, function(error, result) {
+  messages: {
+    get: function(req, res) {
+      console.log('index.js messages get');
+      dbConnection = mysql.createConnection({
+        user: "root",
+        password: "",
+        database: "chat"
+      });
+      dbConnection.connect();
+      var message = { body:req.body.message };
+      // var message = req.body;
+      console.log(req.body);
+      console.log('getting a message', message, typeof message);
+      dbConnection.query('SELECT * FROM messages', function(error, result) {
         if(error) {
           throw error;
         } else {
-          console.log('success');
+          console.log(result);
           dbConnection.end();
+          console.log('success');
+          res.status(200).end(JSON.stringify(result));
+        }
+      });
+    },
+    post: function(req, res) {
+      dbConnection = mysql.createConnection({
+        user: "root",
+        password: "",
+        database: "chat"
+      });
+      dbConnection.connect();
+      var message = { body:req.body.message };
+      // var message = req.body;
+      console.log(req.body);
+      console.log('posting a message', message, typeof message);
+      dbConnection.query('INSERT INTO messages SET ?', message, function(error, result) {
+        if(error) {
+          throw error;
+        } else {
+          dbConnection.end();
+          console.log('success');
           res.status(201).end();
         }
       });
@@ -41,9 +66,16 @@ module.exports = {
   users: {
     get: function(req, res) {},
     post: function(req, res) {
+      dbConnection = mysql.createConnection({
+        user: "root",
+        password: "",
+        database: "chat"
+      });
       dbConnection.connect();
+
       var body = req.body;
-      console.log(body);
+      console.log('posting a user',body,typeof body);
+      // add check to see if user is already in there, SELECT query and check results length
       dbConnection.query('INSERT INTO `users` SET ?', body, function(error, result) {
         if(error) {
           throw error;
@@ -53,7 +85,7 @@ module.exports = {
           res.status(201).end();
         }
       });
-    }
+    } 
   }
 }
 

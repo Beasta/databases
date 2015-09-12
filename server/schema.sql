@@ -79,8 +79,8 @@ CREATE TABLE `chatrooms` (
 -- Foreign Keys 
 -- ---
 
-ALTER TABLE `messages` ADD FOREIGN KEY (id_users) REFERENCES `users` (`id`);
-ALTER TABLE `messages` ADD FOREIGN KEY (id_chatrooms) REFERENCES `chatrooms` (`id`);
+-- ALTER TABLE `messages` ADD FOREIGN KEY (id_users) REFERENCES `users` (`id`);
+-- ALTER TABLE `messages` ADD FOREIGN KEY (id_chatrooms) REFERENCES `chatrooms` (`id`);
 
 -- ---
 -- Table Properties
